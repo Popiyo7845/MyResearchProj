@@ -40,7 +40,7 @@ function showSection(sectionId) {
 // Logout function
 function logout() {
   if (confirm('Are you sure you want to logout?')) {
-    window.location.href = 'Log-in/index.html';
+    window.location.href = 'index.html';
   }
 }
 

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Redirect to dashboard
         alert('Login successful!');
-        window.location.href = '../examplepg.html';
+        window.location.href = 'examplepg.html';
       } else {
         alert('Invalid username or password! Please try again.');
       }
