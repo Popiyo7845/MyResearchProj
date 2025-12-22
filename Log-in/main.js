@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Redirect to dashboard
         alert('Login successful!');
-        window.location.href = 'examplepg.html';
+        window.location.href = window.location.hostname === 'localhost' 
+          ? '../examplepg.html' 
+          : '/dashboard';
       } else {
         alert('Invalid username or password! Please try again.');
       }

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -8,9 +9,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(__dirname));
+
 // MongoDB Connection
-const MONGODB_URI = 'mongodb://localhost:27017/inventory_system';
-// For MongoDB Atlas (cloud), replace with: 'mongodb+srv://username:password@cluster.mongodb.net/inventory_system'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory_system';
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
@@ -38,6 +41,18 @@ productSchema.pre('save', async function(next) {
 });
 
 const Product = mongoose.model('Product', productSchema);
+
+// ==================== FRONTEND ROUTES ====================
+
+// Serve login page as root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Log-in', 'main.html'));
+});
+
+// Serve dashboard
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'examplepg.html'));
+});
 
 // ==================== API ROUTES ====================
 
@@ -149,8 +164,14 @@ app.get('/api/recent-activity', async (req, res) => {
   }
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Server is running' });
+});
+
 // Start server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}/api`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
 });

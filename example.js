@@ -1,5 +1,7 @@
-// API Base URL
-const API_URL = 'http://localhost:3000/api';
+// API Base URL - automatically detects if running locally or on Render
+const API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api' 
+  : '/api';
 
 // Global state
 let products = [];
@@ -40,7 +42,7 @@ function showSection(sectionId) {
 // Logout function
 function logout() {
   if (confirm('Are you sure you want to logout?')) {
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
   }
 }
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RoboDispense IMS - Create Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Log-in/main.css" />
+</head>
+<body>
+  <main class="layout">
+    <!-- Left panel -->
+    <section class="panel panel--brand" aria-label="Brand">
+      <div class="brand">
+        <h1 class="brand__title">RoboDispense IMS</h1>
+      </div>
+    </section>
+
+    <!-- Right panel -->
+    <section class="panel panel--form" aria-label="Register">
+      <div class="form-wrapper">
+        <header class="form-header">
+          <img src="Log-in/Logo design for Robo.png" alt="RoboDispense robotic arm logo" class="logo" />
+        </header>
+
+        <h2 class="login-title">CREATE ACCOUNT</h2>
+        <p class="login-note">Register to access the system</p>
+
+        <form class="login-form" id="registerForm" novalidate>
+          <div class="field">
+            <label for="fullname" class="field__label">Full Name</label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              class="field__input"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="email" class="field__label">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="field__input"
+              placeholder="Enter your email"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="reg-username" class="field__label">Username</label>
+            <input
+              type="text"
+              id="reg-username"
+              name="username"
+              class="field__input"
+              placeholder="Choose a username"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="reg-password" class="field__label">Password</label>
+            <input
+              type="password"
+              id="reg-password"
+              name="password"
+              class="field__input"
+              placeholder="Create a password"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="confirm-password" class="field__label">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirmPassword"
+              class="field__input"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn--primary">CREATE ACCOUNT</button>
+          
+          <p style="text-align: center; margin-top: 16px; color: #6b7280; font-size: 14px;">
+            Already have an account? 
+            <a href="index.html" style="color: #dc2626; text-decoration: none; font-weight: 600;">Log In</a>
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="Log-in/register.js"></script>
+</body>
+</html>

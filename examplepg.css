@@ -1,4 +1,4 @@
- * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -22,6 +22,9 @@
             color: white;
             display: flex;
             flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
         }
 
         .logo-section {
@@ -38,7 +41,10 @@
         .nav-menu {
             flex: 1;
             padding: 24px 0;
+            
         }
+        
+
 
         .nav-button {
             width: 100%;
@@ -53,6 +59,7 @@
             transition: background 0.2s;
             border-left: 4px solid transparent;
         }
+
 
         .nav-button:hover {
             background: #991b1b;

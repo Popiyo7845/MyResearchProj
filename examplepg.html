@@ -5,6 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robo Dispense IMS</title>
     <link rel="stylesheet" href="examplepg.css">
+    <style>
+        /* Notification styles */
+        .notification-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .notification-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            height: 40px;
+            width: 40px;
+        }
+        
+        .notification-btn:focus {
+            outline: none;
+        }
+        
+        .notification-btn svg {
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid #dc2626;
+        }
+        
+        .notification-panel {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .notification-header {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .notification-header h3 {
+            margin: 0;
+            color: #111827;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .notification-list {
+            padding: 8px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,13 +112,37 @@
         <div class="main-content">
             <header class="header">
                 <h2>Welcome</h2>
-                <button class="logout-btn" onclick="logout()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                </button>
+                <div class="header-actions">
+                    <!-- Notification Button -->
+                    <div class="notification-container">
+                        <button class="notification-btn" onclick="toggleNotificationPanel()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" focusable="false">
+                                <circle cx="12" cy="12" r="10" fill="#dc2626"/>
+                                <path d="M12 6v6M12 16h.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span class="notification-badge" id="notificationBadge">0</span>
+                        </button>
+                        
+                        <!-- Notification Panel -->
+                        <div class="notification-panel" id="notificationPanel">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                            </div>
+                            <div class="notification-list" id="notificationList">
+                                <p style="text-align: center; color: #9ca3af; padding: 20px;">No notifications</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Logout Button -->
+                    <button class="logout-btn" onclick="logout()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
             </header>
 
             <div class="content-area">
