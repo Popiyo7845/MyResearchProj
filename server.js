@@ -15,9 +15,14 @@ app.use(express.static(__dirname));
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory_system';
 
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+const mongoose = require('mongoose');
+
+mongoose.connect(
+  'mongodb+srv://popiyo7845:popiyo7845@cluster0.3mlpgbe.mongodb.net/myDatabase?retryWrites=true&w=majority',
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+.then(() => console.log('Connected to Atlas'))
+.catch(err => console.error('Connection error:', err));
 
 // Product Schema
 const productSchema = new mongoose.Schema({
