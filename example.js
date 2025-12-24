@@ -1,7 +1,11 @@
-// API Base URL - automatically detects if running locally or on Render
+// API Base URL - automatically detects if running locally or on production
+// IMPORTANT: Replace 'YOUR-RENDER-APP-NAME' with your actual Render app name
 const API_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3000/api' 
-  : '/api';
+  : 'https://myresearchproj-1.onrender.com/api';  // ← CHANGE THIS!
+
+// Example: If your Render URL is https://robo-dispense-backend.onrender.com
+// Then change it to: 'https://robo-dispense-backend.onrender.com/api'
 
 // Global state
 let products = [];
