@@ -1,11 +1,7 @@
 // API Base URL - automatically detects if running locally or on production
-// IMPORTANT: Replace 'YOUR-RENDER-APP-NAME' with your actual Render app name
 const API_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3000/api' 
-  : 'https://myresearchproj-1.onrender.com/api';  // ← CHANGE THIS!
-
-// Example: If your Render URL is https://robo-dispense-backend.onrender.com
-// Then change it to: 'https://robo-dispense-backend.onrender.com/api'
+  : 'https://myresearchproj-1.onrender.com/api';
 
 // Global state
 let products = [];
@@ -46,7 +42,7 @@ function showSection(sectionId) {
 // Logout function
 function logout() {
   if (confirm('Are you sure you want to logout?')) {
-    window.location.href = 'index.html';
+    window.location.href = 'Log-in/main.html';
   }
 }
 
@@ -113,7 +109,7 @@ async function loadInventory() {
           <td>${product.quantity}</td>
           <td><span class="status-badge ${statusClass}">${status}</span></td>
           <td>
-            <button onclick="deleteProduct('${product._id}', '${product.productName}')" 
+            <button onclick="stockOut('${product._id}', '${product.productName}', ${product.quantity})" 
                     style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
               Out
             </button>
@@ -127,22 +123,71 @@ async function loadInventory() {
   }
 }
 
-// Delete Product Function
-async function deleteProduct(productId, productName) {
-  if (!confirm(`Are you sure you want to mark "${productName}" as OUT?\nThis will remove it from inventory.`)) {
+// Stock Out Function - NEW: Ask for quantity to remove
+async function stockOut(productId, productName, currentQuantity) {
+  // Ask user how many units to remove
+  const quantityToRemove = prompt(
+    `How many units of "${productName}" do you want to remove?\n\nCurrent stock: ${currentQuantity} units`,
+    '1'
+  );
+  
+  // User cancelled
+  if (quantityToRemove === null) {
     return;
   }
   
+  // Validate input
+  const quantity = parseInt(quantityToRemove);
+  
+  if (isNaN(quantity) || quantity <= 0) {
+    alert('Please enter a valid quantity greater than 0');
+    return;
+  }
+  
+  if (quantity > currentQuantity) {
+    alert(`Cannot remove ${quantity} units. Only ${currentQuantity} units available in stock.`);
+    return;
+  }
+  
+  // Calculate new quantity
+  const newQuantity = currentQuantity - quantity;
+  
   try {
-    const response = await fetch(`${API_URL}/products/${productId}`, {
-      method: 'DELETE'
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to delete product');
+    // If new quantity is 0, delete the product
+    if (newQuantity === 0) {
+      const confirmDelete = confirm(
+        `This will remove all remaining ${currentQuantity} units of "${productName}".\n\nThe product will be completely removed from inventory. Continue?`
+      );
+      
+      if (!confirmDelete) {
+        return;
+      }
+      
+      const response = await fetch(`${API_URL}/products/${productId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to remove product');
+      }
+      
+      alert(`✅ All ${quantity} units of "${productName}" have been removed from inventory.`);
+    } else {
+      // Update product with new quantity
+      const response = await fetch(`${API_URL}/products/${productId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update product quantity');
+      }
+      
+      alert(`✅ Removed ${quantity} units of "${productName}".\n\nRemaining stock: ${newQuantity} units`);
     }
-    
-    alert(`✅ "${productName}" has been marked as OUT and removed from inventory.`);
     
     // Reload inventory and stats
     loadInventory();
@@ -150,8 +195,8 @@ async function deleteProduct(productId, productName) {
     loadRecentActivity();
     
   } catch (error) {
-    console.error('Error deleting product:', error);
-    alert('Failed to remove product: ' + error.message);
+    console.error('Error updating stock:', error);
+    alert('Failed to update stock: ' + error.message);
   }
 }
 
