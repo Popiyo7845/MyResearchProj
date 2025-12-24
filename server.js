@@ -13,16 +13,33 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory_system';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://popiyo7845:popiyo7845@cluster0.3mlpgbe.mongodb.net/myDatabase?retryWrites=true&w=majority';
 
-const mongoose = require('mongoose');
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log('✅ Connected to MongoDB Atlas');
+  console.log('📊 Database:', mongoose.connection.name);
+})
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err);
+  process.exit(1);
+});
 
-mongoose.connect(
-  'mongodb+srv://popiyo7845:popiyo7845@cluster0.3mlpgbe.mongodb.net/myDatabase?retryWrites=true&w=majority',
-  { useNewUrlParser: true, useUnifiedTopology: true }
-)
-.then(() => console.log('Connected to Atlas'))
-.catch(err => console.error('Connection error:', err));
+// Handle connection events
+mongoose.connection.on('connected', () => {
+  console.log('Mongoose connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose disconnected from MongoDB');
+});
 
 // Product Schema
 const productSchema = new mongoose.Schema({
@@ -67,6 +84,7 @@ app.get('/api/products', async (req, res) => {
     const products = await Product.find().sort({ createdAt: -1 });
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -80,6 +98,7 @@ app.get('/api/products/:id', async (req, res) => {
     }
     res.json(product);
   } catch (error) {
+    console.error('Error fetching product:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -91,6 +110,7 @@ app.post('/api/products', async (req, res) => {
     await product.save();
     res.status(201).json(product);
   } catch (error) {
+    console.error('Error adding product:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -108,6 +128,7 @@ app.put('/api/products/:id', async (req, res) => {
     }
     res.json(product);
   } catch (error) {
+    console.error('Error updating product:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -121,6 +142,7 @@ app.delete('/api/products/:id', async (req, res) => {
     }
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
+    console.error('Error deleting product:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -146,6 +168,7 @@ app.get('/api/stats', async (req, res) => {
       lowStockItems
     });
   } catch (error) {
+    console.error('Error fetching stats:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -165,18 +188,25 @@ app.get('/api/recent-activity', async (req, res) => {
     
     res.json(activity);
   } catch (error) {
+    console.error('Error fetching recent activity:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.json({ 
+    status: 'ok', 
+    message: 'Server is running',
+    database: dbStatus
+  });
 });
 
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 Access: http://localhost:${PORT}`);
 });
