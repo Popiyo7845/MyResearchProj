@@ -45,7 +45,6 @@ function showSection(sectionId) {
 function logout() {
   if (confirm('Are you sure you want to logout?')) {
     window.location.href = 'index.html';
-<<<<<<< HEAD
   }
 }
 
@@ -148,8 +147,6 @@ async function updateNotifications() {
     
   } catch (error) {
     console.error('Error updating notifications:', error);
-=======
->>>>>>> b86ed7c406b05dedc8f21779eecc2efafb07ce9a
   }
 }
 
@@ -204,7 +201,7 @@ async function loadInventory() {
     const tbody = document.getElementById('inventoryTableBody');
     
     if (products.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #9ca3af; padding: 40px;">No inventory items found</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #9ca3af; padding: 40px;">No inventory items found</td></tr>';
       return;
     }
     
