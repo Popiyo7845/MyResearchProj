@@ -5,96 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robo Dispense IMS</title>
     <link rel="stylesheet" href="examplepg.css">
-    <style>
-        /* Notification styles */
-        .notification-container {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .notification-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: none;
-            height: 40px;
-            width: 40px;
-        }
-        
-        .notification-btn:focus {
-            outline: none;
-        }
-        
-        .notification-btn svg {
-            fill: none;
-            stroke: white;
-            stroke-width: 2;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            border: 2px solid #dc2626;
-        }
-        
-        .notification-panel {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            width: 350px;
-            max-height: 400px;
-            overflow-y: auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-        }
-        
-        .notification-header {
-            padding: 16px;
-            border-bottom: 1px solid #e5e7eb;
-            background: #f9fafb;
-            border-radius: 12px 12px 0 0;
-        }
-        
-        .notification-header h3 {
-            margin: 0;
-            color: #111827;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .notification-list {
-            padding: 8px;
-        }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-    </style>
 </head>
 <body>
-
-      <div class="container">
+    <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo-section">
@@ -105,6 +18,7 @@
                 <button class="nav-button active" onclick="showSection('dashboard')">Dashboard</button>
                 <button class="nav-button" onclick="showSection('inventory')">Inventory</button>
                 <button class="nav-button" onclick="showSection('stockin')">Stock in</button>
+                <button class="nav-button" onclick="showSection('guide')">📖 User Guide</button>
             </nav>
         </div>
 
@@ -181,6 +95,7 @@
                                 <tr>
                                     <th>Item Code</th>
                                     <th>Item Name</th>
+                                    <th>Brand</th>
                                     <th>Quantity</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -188,7 +103,7 @@
                             </thead>
                             <tbody id="inventoryTableBody">
                                 <tr>
-                                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 40px;">No inventory items found</td>
+                                    <td colspan="6" style="text-align: center; color: #9ca3af; padding: 40px;">No inventory items found</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -234,12 +149,177 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Guide Section -->
+                <div id="guide" class="content-section">
+                    <h1>📖 User Guide</h1>
+                    
+                    <!-- Getting Started -->
+                    <div class="guide-card">
+                        <h2>🚀 Getting Started</h2>
+                        <p>Welcome to Robo Dispense Inventory Management System! This guide will help you navigate and use all features of the application.</p>
+                    </div>
+
+                    <!-- Dashboard Guide -->
+                    <div class="guide-card">
+                        <h2>📊 Dashboard</h2>
+                        <p>The Dashboard provides a quick overview of your inventory status.</p>
+                        
+                        <h3>What You'll See:</h3>
+                        <ul>
+                            <li><strong>Total Items:</strong> Shows the total number of different products in your inventory</li>
+                            <li><strong>Stock In Today:</strong> Number of new products added today</li>
+                            <li><strong>Low Stock Items:</strong> Products with less than 10 units remaining</li>
+                            <li><strong>Recent Activity:</strong> Timeline of recent inventory changes</li>
+                        </ul>
+                    </div>
+
+                    <!-- Notifications Guide -->
+                    <div class="guide-card">
+                        <h2>🔔 Notifications</h2>
+                        <p>Stay informed about important inventory alerts through the notification bell icon in the top-right corner.</p>
+                        
+                        <h3>You'll Receive Alerts For:</h3>
+                        <ul>
+                            <li><strong>🔴 Critical Alerts:</strong> Expired products or items expiring within 7 days</li>
+                            <li><strong>🟡 Warning Alerts:</strong> Products expiring within 8-30 days or low stock items</li>
+                        </ul>
+                        
+                        <div class="tip-box">
+                            <strong>💡 Tip:</strong>
+                            <p>Click the bell icon to view all notifications. The red badge shows the total count of active alerts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Stock In Guide -->
+                    <div class="guide-card">
+                        <h2>📦 Adding New Stock</h2>
+                        <p>Follow these steps to add new products to your inventory:</p>
+                        
+                        <div class="guide-step">
+                            <strong>Step 1:</strong> Click on "Stock in" in the sidebar
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 2:</strong> Fill in all required fields:
+                            <ul>
+                                <li>Product Name (e.g., "Paracetamol 500mg")</li>
+                                <li>Quantity (number of units)</li>
+                                <li>Brand (manufacturer name)</li>
+                                <li>Expiration Date</li>
+                                <li>Manufacturing Date</li>
+                                <li>Description (optional details)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 3:</strong> Click "Add to Stock" button
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 4:</strong> You'll receive a confirmation with the auto-generated Item Code
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Important:</strong>
+                            <p>Make sure the manufacturing date is before the expiration date. The system will reject invalid date ranges.</p>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Management Guide -->
+                    <div class="guide-card">
+                        <h2>📋 Managing Inventory</h2>
+                        <p>View and manage all your products from the Inventory section.</p>
+                        
+                        <h3>Inventory Table Columns:</h3>
+                        <ul>
+                            <li><strong>Item Code:</strong> Unique identifier for each product</li>
+                            <li><strong>Item Name:</strong> Product name</li>
+                            <li><strong>Quantity:</strong> Current stock level</li>
+                            <li><strong>Status:</strong> "In Stock" or "Low Stock" indicator</li>
+                            <li><strong>Action:</strong> "Out" button to remove stock</li>
+                        </ul>
+
+                        <h3>Removing Stock (Stock Out):</h3>
+                        <div class="guide-step">
+                            <strong>Step 1:</strong> Click the red "Out" button next to the product
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 2:</strong> A modal window will appear showing:
+                            <ul>
+                                <li>Product name</li>
+                                <li>Current stock level</li>
+                                <li>Input field for quantity to remove</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 3:</strong> Enter the quantity to remove
+                            <ul>
+                                <li>System shows remaining stock in real-time</li>
+                                <li>Validates you don't exceed available quantity</li>
+                                <li>Warns if removing all stock (product will be deleted)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="guide-step">
+                            <strong>Step 4:</strong> Click "Remove Stock" to confirm
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Tip:</strong>
+                            <p>You can press ESC or click outside the modal to cancel the operation.</p>
+                        </div>
+                    </div>
+
+                    <!-- Best Practices -->
+                    <div class="guide-card">
+                        <h2>✅ Best Practices</h2>
+                        <ul>
+                            <li><strong>Regular Monitoring:</strong> Check notifications daily to stay ahead of expiring products</li>
+                            <li><strong>Accurate Data Entry:</strong> Always double-check dates and quantities when adding stock</li>
+                            <li><strong>Maintain Stock Levels:</strong> Keep items above 10 units to avoid low stock alerts</li>
+                            <li><strong>Update Promptly:</strong> Remove stock immediately when products are dispensed</li>
+                            <li><strong>Review Dashboard:</strong> Start each day by reviewing the dashboard statistics</li>
+                        </ul>
+                    </div>
+
+                    <!-- Troubleshooting -->
+                    <div class="guide-card">
+                        <h2>🔧 Troubleshooting</h2>
+                        
+                        <h3>Data Not Loading?</h3>
+                        <ul>
+                            <li>Check your internet connection</li>
+                            <li>Refresh the page (F5 or Ctrl+R)</li>
+                            <li>Make sure the server is running</li>
+                        </ul>
+
+                        <h3>Can't Add Product?</h3>
+                        <ul>
+                            <li>Ensure all required fields are filled</li>
+                            <li>Verify dates are in correct order (Manufacturing → Expiration)</li>
+                            <li>Check quantity is greater than 0</li>
+                        </ul>
+
+                        <h3>Notifications Not Showing?</h3>
+                        <ul>
+                            <li>Refresh the page to update notification count</li>
+                            <li>Check if you have any products near expiration or low stock</li>
+                        </ul>
+                    </div>
+
+                    <!-- Need Help -->
+                    <div class="guide-card guide-help-card">
+                        <h2>📞 Need More Help?</h2>
+                        <p>If you encounter any issues or have questions not covered in this guide, please contact your system administrator or IT support team.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-  <script src="example.js"></script>
-
-    
+    <script src="example.js"></script>
 </body>
 </html>
