@@ -45,6 +45,7 @@ function showSection(sectionId) {
 function logout() {
   if (confirm('Are you sure you want to logout?')) {
     window.location.href = 'index.html';
+<<<<<<< HEAD
   }
 }
 
@@ -147,6 +148,8 @@ async function updateNotifications() {
     
   } catch (error) {
     console.error('Error updating notifications:', error);
+=======
+>>>>>>> b86ed7c406b05dedc8f21779eecc2efafb07ce9a
   }
 }
 
