@@ -28,16 +28,18 @@
         <h2 class="login-title">LOG-IN</h2>
         <p class="login-note">Only authorized person can access</p>
 
+        <div id="alertBox" class="alert"></div>
+
         <form class="login-form" id="loginForm" novalidate>
           <div class="field">
-            <label for="username" class="field__label">Username</label>
+            <label for="email" class="field__label">Email</label>
             <input
-              type="text"
-              id="username"
-              name="username"
+              type="email"
+              id="email"
+              name="email"
               class="field__input"
-              placeholder="Enter your username"
-              autocomplete="username"
+              placeholder="Enter your email"
+              autocomplete="email"
               required
             />
           </div>
@@ -55,12 +57,15 @@
             />
           </div>
 
-          <button type="submit" class="btn btn--primary">LOGIN</button>
+          <button type="submit" class="btn btn--primary" id="loginBtn">LOGIN</button>
         </form>
+
+        <div class="register-link">
+          Don't have an account? <a href="register.html">Register here</a>
+        </div>
       </div>
     </section>
   </main>
-
   <script src="Log-in/main.js"></script>
 </body>
 </html>

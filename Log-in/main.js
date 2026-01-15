@@ -1,41 +1,96 @@
-// Handle login form submission
+// ==================== LOGIN FUNCTIONALITY ====================
+
 document.addEventListener('DOMContentLoaded', function() {
   const loginForm = document.getElementById('loginForm');
+  const alertBox = document.getElementById('alertBox');
+  const loginBtn = document.getElementById('loginBtn');
   
+  // Function to show alerts
+  function showAlert(message, type) {
+    if (alertBox) {
+      alertBox.textContent = message;
+      alertBox.className = `alert alert-${type} show`;
+    }
+  }
+  
+  // Handle login form submission
   if (loginForm) {
-    loginForm.addEventListener('submit', function(event) {
+    loginForm.addEventListener('submit', async function(event) {
       event.preventDefault();
       
-      // Get form values
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
       
-      // Simple validation
-      if (!username || !password) {
-        alert('Please enter both username and password');
+      if (!email || !password) {
+        showAlert('Please enter both email and password', 'error');
         return;
       }
       
-      // Hardcoded credentials (for testing)
-      const validUsername = 'admin';
-      const validPassword = 'admin123';
+      // Disable button and show loading
+      if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'LOGGING IN...';
+      }
+      if (alertBox) {
+        alertBox.classList.remove('show');
+      }
       
-      if (username === validUsername && password === validPassword) {
-        // Store username in sessionStorage
-        sessionStorage.setItem('username', username);
-        sessionStorage.setItem('isLoggedIn', 'true');
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
         
-        // Redirect to dashboard
-        alert('Login successful!');
-        window.location.href = window.location.hostname === 'localhost' 
-          ? '../examplepg.html' 
-          : '/dashboard';
-      } else {
-        alert('Invalid username or password! Please try again.');
+        const data = await response.json();
+        
+        if (loginBtn) {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'LOGIN';
+        }
+        
+        if (data.success) {
+          // Store user info and token in localStorage
+          localStorage.setItem('user', JSON.stringify(data.user));
+          if (data.token) {
+            localStorage.setItem('token', data.token);
+          }
+          
+          showAlert('Login successful! Redirecting...', 'success');
+          
+          // Redirect based on user role
+          setTimeout(() => {
+            if (data.user.role === 'admin') {
+              window.location.href = '/admin.html';
+            } else {
+              window.location.href = '/examplepg.html';
+            }
+          }, 1000);
+        } else {
+          showAlert(data.error || 'Login failed. Please try again.', 'error');
+        }
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        if (loginBtn) {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'LOGIN';
+        }
+        showAlert('An error occurred. Please try again later.', 'error');
       }
     });
   }
+  
+  // Check if there's a success message from registration
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('verified') === 'true' && alertBox) {
+    showAlert('Email verified successfully! You can now log in.', 'success');
+  }
 });
+
+// ==================== REGISTRATION FUNCTIONALITY ====================
 
 // Handle registration link (if you have one)
 const registerLink = document.getElementById('register-link');
