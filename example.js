@@ -1,6 +1,6 @@
 // API Base URL - automatically detects if running locally or on production
 const API_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3000/api' 
+  ? 'http://localhost:10000/api' 
   : 'https://myresearchproj-1.onrender.com/api';
 
 // Global state
