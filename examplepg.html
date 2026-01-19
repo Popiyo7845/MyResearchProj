@@ -8,10 +8,17 @@
 </head>
 <body>
     <div class="container">
+        <!-- Sidebar Toggle Button -->
+        <button class="sidebar-toggle sidebar-open" onclick="toggleSidebar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </button>
+
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="logo-section">
-                <img src="Log-in/Logo design for Robo.png" alt="Robo Dispense IMS Logo">
+                <img src="Log-in/Newlogo-removebg-preview.png" alt="Robo Dispense IMS Logo">
             </div>
             
             <nav class="nav-menu">
@@ -27,6 +34,13 @@
             <header class="header">
                 <h2>Welcome</h2>
                 <div class="header-actions">
+                    <!-- Night Mode Toggle -->
+                    <button class="night-mode-toggle" onclick="toggleNightMode()" title="Toggle Night Mode">
+                        <svg id="nightModeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    
                     <!-- Notification Button -->
                     <div class="notification-container">
                         <button class="notification-btn" onclick="toggleNotificationPanel()">

@@ -1,6 +1,6 @@
 // API Base URL - automatically detects if running locally or on production
 const API_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:10000/api' 
+  ? 'http://localhost:3000/api' 
   : 'https://myresearchproj-1.onrender.com/api';
 
 // Global state
@@ -13,6 +13,51 @@ document.addEventListener('DOMContentLoaded', () => {
   loadInventory();
   loadRecentStock();
   updateNotifications(); // Initialize notifications
+});
+
+// ==================== SIDEBAR TOGGLE FUNCTION ====================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.querySelector('.sidebar-toggle');
+  
+  sidebar.classList.toggle('hidden');
+  toggleBtn.classList.toggle('sidebar-open');
+}
+
+// ==================== NIGHT MODE TOGGLE FUNCTION ====================
+function toggleNightMode() {
+  document.body.classList.toggle('night-mode');
+  
+  // Save preference to localStorage
+  const isNightMode = document.body.classList.contains('night-mode');
+  localStorage.setItem('nightMode', isNightMode);
+  
+  // Update icon
+  const icon = document.getElementById('nightModeIcon');
+  if (isNightMode) {
+    // Sun icon for day mode
+    icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+  } else {
+    // Moon icon for night mode
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+  }
+}
+
+// Load night mode preference on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Check for saved night mode preference
+  const savedNightMode = localStorage.getItem('nightMode') === 'true';
+  if (savedNightMode) {
+    document.body.classList.add('night-mode');
+    const icon = document.getElementById('nightModeIcon');
+    icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+  }
+  
+  loadDashboardStats();
+  loadRecentActivity();
+  loadInventory();
+  loadRecentStock();
+  updateNotifications();
 });
 
 // Navigation
