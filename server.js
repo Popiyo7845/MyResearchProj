@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory-system';
+const MONGODB_URI = process.env.db || process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory-system';
 
 console.log('Connecting to MongoDB...');
 mongoose.connect(MONGODB_URI)
