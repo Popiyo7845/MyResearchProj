@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-// MongoDB Connection
-const MONGODB_URI = process.env.db || process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory-system';
+// MongoDB Connection - FIXED: Check MONGODB_URI first
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory-system';
 
 console.log('Connecting to MongoDB...');
 mongoose.connect(MONGODB_URI)
@@ -321,7 +321,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ==================== DEBUG ROUTE (ADD THIS) ====================
+// ==================== DEBUG ROUTE ====================
 
 // DEBUG: Check database connection and users
 app.get('/api/debug/check', async (req, res) => {
@@ -340,7 +340,6 @@ app.get('/api/debug/check', async (req, res) => {
     res.json({
       mongoStatus,
       environmentVars: {
-        hasDB: !!process.env.db,
         hasMONGODB_URI: !!process.env.MONGODB_URI,
         hasSESSION_SECRET: !!process.env.SESSION_SECRET,
         NODE_ENV: process.env.NODE_ENV
@@ -375,19 +374,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log('Server is running on http://localhost:' + PORT);
-  console.log('Ready to accept connections!');
-  
-  // At the end of your server.js file
-module.exports = app; // Export the app
+// ==================== EXPORT & START SERVER ====================
 
-// Modify your app.listen() to only run locally:
+// Export the app for Vercel
+module.exports = app;
+
+// Only run the server locally (not on Vercel)
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log('Server is running on http://localhost:' + PORT);
+    console.log('Ready to accept connections!');
   });
 }
-});
