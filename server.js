@@ -379,4 +379,15 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log('Server is running on http://localhost:' + PORT);
   console.log('Ready to accept connections!');
+  
+  // At the end of your server.js file
+module.exports = app; // Export the app
+
+// Modify your app.listen() to only run locally:
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 });
