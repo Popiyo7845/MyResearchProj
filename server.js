@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-// MongoDB Connection - FIXED: Check MONGODB_URI first
+// MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventory-system';
 
 console.log('Connecting to MongoDB...');
@@ -374,15 +374,52 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ==================== EXPORT & START SERVER ====================
+// Start server
+app.listen(PORT, () => {
+  console.log('Server is running on http://localhost:' + PORT);
+  console.log('Ready to accept connections!');
 
-// Export the app for Vercel
-module.exports = app;
-
-// Only run the server locally (not on Vercel)
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log('Server is running on http://localhost:' + PORT);
-    console.log('Ready to accept connections!');
-  });
-}
+// Add this AFTER your other routes, before app.listen()
+app.post('/api/debug/test-login', async (req, res) => {
+  try {
+    const User = require('./model/user');
+    const { email, password } = req.body;
+    
+    console.log('Testing login for:', email);
+    
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.json({ 
+        success: false, 
+        message: 'User not found',
+        email: email 
+      });
+    }
+    
+    const isMatch = await user.comparePassword(password);
+    
+    console.log('Password match:', isMatch);
+    
+    res.json({
+      success: true,
+      userExists: true,
+      passwordMatch: isMatch,
+      userDetails: {
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        hasPasswordField: !!user.password,
+        passwordLength: user.password ? user.password.length : 0
+      }
+    });
+    
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+});

@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
             'Content-Type': 'application/json'
           },
+          credentials: 'include',  // ← THIS IS THE FIX!
           body: JSON.stringify({ email, password })
         });
         
@@ -52,11 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (data.success) {
-          // Store user info and token in localStorage
+          // Store user info in localStorage (optional, session is primary)
           localStorage.setItem('user', JSON.stringify(data.user));
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-          }
           
           showAlert('Login successful! Redirecting...', 'success');
           
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           }, 1000);
         } else {
-          showAlert(data.error || 'Login failed. Please try again.', 'error');
+          showAlert(data.message || data.error || 'Login failed. Please try again.', 'error');
         }
         
       } catch (error) {
