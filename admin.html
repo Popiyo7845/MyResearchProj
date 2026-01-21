@@ -372,7 +372,27 @@
     const user = localStorage.getItem('user');
     if (user) {
       currentAdmin = JSON.parse(user);
-      // Check if user is admin (you can add role check here)
+    }
+
+    // Check authentication on page load
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/auth/check-session', {
+          credentials: 'include'
+        });
+        const data = await response.json();
+        
+        if (!data.authenticated || data.role !== 'admin') {
+          alert('You must be logged in as admin to access this page');
+          window.location.href = '/';
+          return false;
+        }
+        return true;
+      } catch (error) {
+        console.error('Auth check error:', error);
+        window.location.href = '/';
+        return false;
+      }
     }
 
     function switchTab(tab) {
@@ -412,7 +432,9 @@
       content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading...</p></div>';
 
       try {
-        const response = await fetch('/api/auth/admin/pending-users');
+        const response = await fetch('/api/auth/admin/pending-users', {
+          credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success && data.users.length > 0) {
@@ -464,7 +486,7 @@
         } else {
           content.innerHTML = `
             <div class="empty-state">
-              <div class="empty-state-icon">📭</div>
+              <div class="empty-state-icon">🔭</div>
               <h3>No Pending Users</h3>
               <p>All registrations have been reviewed</p>
             </div>
@@ -479,7 +501,7 @@
           <div class="empty-state">
             <div class="empty-state-icon">❌</div>
             <h3>Error Loading Users</h3>
-            <p>Please try again later</p>
+            <p>${error.message}</p>
           </div>
         `;
       }
@@ -490,7 +512,9 @@
       content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading...</p></div>';
 
       try {
-        const response = await fetch('/api/auth/admin/all-users');
+        const response = await fetch('/api/auth/admin/all-users', {
+          credentials: 'include'
+        });
         const data = await response.json();
 
         if (data.success && data.users.length > 0) {
@@ -553,7 +577,7 @@
           <div class="empty-state">
             <div class="empty-state-icon">❌</div>
             <h3>Error Loading Users</h3>
-            <p>Please try again later</p>
+            <p>${error.message}</p>
           </div>
         `;
       }
@@ -572,6 +596,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
+          credentials: 'include',
           body: JSON.stringify({ adminEmail })
         });
 
@@ -580,6 +605,7 @@
         if (data.success) {
           showAlert('User approved successfully!', 'success');
           loadPendingUsers();
+          loadAllUsers();
         } else {
           showAlert(data.error || 'Failed to approve user', 'error');
         }
@@ -599,7 +625,8 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          credentials: 'include'
         });
 
         const data = await response.json();
@@ -607,6 +634,7 @@
         if (data.success) {
           showAlert('User rejected successfully!', 'success');
           loadPendingUsers();
+          loadAllUsers();
         } else {
           showAlert(data.error || 'Failed to reject user', 'error');
         }
@@ -616,8 +644,13 @@
       }
     }
 
-    // Load pending users on page load
-    loadPendingUsers();
+    // Check authentication and load data on page load
+    (async function init() {
+      const isAuthenticated = await checkAuth();
+      if (isAuthenticated) {
+        loadPendingUsers();
+      }
+    })();
   </script>
 </body>
 </html>
